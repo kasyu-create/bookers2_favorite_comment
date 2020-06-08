@@ -1,0 +1,50 @@
+<div class="row">
+	<div class="col-xs-3">
+
+		<h2>User info</h2>
+		<%= render 'users/profile', user: @user %>
+		<!-- #renderはファイルを読み込むという意味。
+		#???コントローラーから受け取った@userはuserとして代入されるという意味わざわざuserに変換する必要あるのかなと思う
+	　@user = User.find(params[:id])-->
+
+		<h2>New book</h2>
+		<%= render 'books/newform', book: @book %>
+    <!-- 上に同じ -->
+
+	</div>
+
+	<div class="col-xs-9">
+
+		<h2>Books</h2>
+		<!--books一覧 -->
+		<table class="table table-hover table-inverse">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Title</th>
+					<th>Opinion</th>
+					<th colspan="3"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<% @books.each do |book| %>
+				<%# @booksはbooksコントローラーの@books = Book.allから来ている。Bookテーブルの1つ1つのデータをeachで繰り返し処理を行い、新しい変数bookに代入していっている。 %>
+				<tr>
+					<td>
+						<%= link_to (book.user) do %>
+						<%= attachment_image_tag(book.user, :profile_image, :fill, 50, 50, fallback: "no-image-mini.jpg") %>
+						<% end %>
+					</td>
+					<td><%= link_to book.title,book, class: "book_#{book.id}" %></td>
+					<!-- #link_toでbookをURLにしているが、これは元々は@booksから来ている。@booksは@books = Book.allから来ている。
+					この場合、投稿された1つ1つのデータを指す。books/3など。 -->
+					<td><%= book.body %></td>
+				</tr>
+				<% end %>
+			</tbody>
+		</table>
+		<!--books一覧 -->
+
+	</div>
+</div>

@@ -1,0 +1,47 @@
+<h2>User info</h2>
+
+<%= form_for(@user) do |f| %>
+<%# ???#@user = @book.userとbook_controllerのshowアクションでなっている。.userが分からん。 あとはどこに送信されるのか%>
+
+
+<!-- エラーメッセージ表示-->
+<% if @user.errors.any? %>
+<%# #any?は存在する場合trueを返し、しない場合はfalseと返す
+???このerrorsはどこから来ているの?%>
+	<h3><%= pluralize(@user.errors.count, "error") %>prohibited this user from being saved:</h3>
+	<!-- pluralizeは単数形か複数形か示すもの。英語専用。この場合@user.errorsのエラーが２つあればerrorsとなる h3はエラーメッセージ。-->
+	<ul>
+		<% @user.errors.full_messages.each do |message| %>
+		<li><%= message %></li>
+		<%# errorメッセージが表示される、ここではName is too short (minimum is 2 characters)などモデルのuser.rbで設定された事を指す。 %>
+		<% end %>
+	</ul>
+<% end %>
+<!-- エラーメッセージ表示-->
+
+<div class="field">
+	<%= f.label :name %>
+	<%# 入力フォームの名前 %>
+	<%= f.text_field :name, class: "name" %>
+	<%# テキストの入力フォームの生成 %>
+</div>
+
+<div class="field">
+	<%= f.label :image %>
+	<%# 入力フォームの名前 %>
+	<%= f.attachment_field :profile_image, class: "user_image" %>
+	<%# 画像フォームの生成 %>
+</div>
+
+<div class="field">
+	<%= f.label :introduction %>
+	<%# 入力フォームの名前 %>
+	<%= f.text_area :introduction, class: "introduction" %>
+	<%# テキストの入力フォームの生成 %>
+</div>
+
+<div class="actions">
+	<%= f.submit %>
+</div>
+
+<% end %>

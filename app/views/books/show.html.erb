@@ -1,0 +1,73 @@
+
+<div class="row">
+	<div class="col-xs-3">
+
+		<h2>User info</h2>
+		<%= render 'users/profile', user:@user %>
+		<%# ???受け取ったidに、その後が分からない。.userとは何か @user = @book.user
+		→book_idを受け取ったbookテーブルのuser_idを@userに代入しているのか。%>
+		<h2>New book</h2>
+		<%= render 'books/newform', book:@new_book %>
+		<!-- @new_book = Book.new取り敢えず、新しいBookテーブルを作っている事は分かる。 -->
+	</div>
+
+	<div class="col-xs-9">
+		<h2>Book detail</h2>
+
+		<table class="table">
+				<tr>
+					<td>
+						<%= link_to (@book.user) do %>
+						<%= attachment_image_tag(@book.user, :profile_image, :fill, 100, 100, fallback: "no-image-mini.jpg") %><br>
+						<%= @book.user.name %>
+						<% end %>
+					</td>
+					<td><%= link_to @book.title, @book %></td>
+					<td><%= @book.body %></td>
+
+					<td>
+					<% if @book.favorited_by?(current_user) %>
+						<%= link_to book_favorites_path(@book), method: :delete do %>
+							<span>★</span><%= @book.favorites.count %>
+
+						<% end %>
+					<% else %>
+						<%= link_to book_favorites_path(@book), method: :post do %>
+							<span>☆</span><%= @book.favorites.count %>
+						<% end %>
+					<% end %>
+					</td>
+
+					<td>コメント数：<%= @book.book_comments.count %></td>
+
+					<% if @book.user == current_user %>
+						<td><%= link_to "Edit",edit_book_path(@book), class: "btn-sm btn-success edit_book_#{@book.id}" %></td>
+						<td><%= link_to "Destroy",@book, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{@book.id}" %></td>
+					<% end %>
+				</tr>
+			</table>
+
+				<%= form_for [@book, @book_comment] do |f| %>
+				<%# ???これでどうやってcreateアクションに飛ぶのか %>
+					<%= f.text_area :comment %>
+					<%= f.submit %>
+				<% end %>
+
+				<table class="table">
+					<% @book_comments.each do |book_comment| %>
+						<tr>
+							<td>
+								<%= book_comment.comment %>
+							<td>
+
+							<td>
+								<% if book_comment.user_id == current_user.id %>
+									<%= link_to "delete", book_book_comment_path(@book, book_comment), method: :delete %>
+								<% end %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+
+	</div>
+</div>
